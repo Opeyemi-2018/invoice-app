@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { GlobalContext } from "../context/createContext";
+import { Link } from "react-router-dom";
 
 const HomeContent = () => {
   const { themeMode } = useContext(GlobalContext);
@@ -54,13 +55,22 @@ const HomeContent = () => {
     <div>
       <div>
         {invoices.map((invoice) => {
-          const { _id, clientName, date, paymentTerm, itemPrice } = invoice;
-          // Convert date string to Date object
+          const {
+            _id,
+            clientName,
+            date,
+            paymentTerm,
+            status,
+            itemPrice,
+          } = invoice;
+
+          // Convert date string to Date object for the created date
           const createdAt = new Date(date);
 
-          // Calculate due date
-          const dueDate = new Date(createdAt);
-          dueDate.setDate(createdAt.getDate() + paymentTerm);
+          // Add the payment term (days) to the created date using milliseconds conversion
+          const dueDate = new Date(
+            createdAt.getTime() + paymentTerm * 24 * 60 * 60 * 1000
+          );
 
           // Format the due date as a full date string
           const formattedDueDate = dueDate.toLocaleDateString("en-US", {
@@ -69,35 +79,46 @@ const HomeContent = () => {
             day: "numeric",
           });
           return (
-            <div
+            <Link
+              to={`/invoice-info/${_id}`}
+              key={_id}
               className={`flex items-center justify-between mb-3 ${
-                themeMode === "light" ? "bg-[#303553]" : "bg-white"
+                themeMode === "light" ? "bg-[#1c2138]" : "bg-white"
               } py-3 sm:px-4 px-3 rounded-md shadow-md`}
             >
               <h1
-                className={`md:font-bold font-semibold ${
+                className={`md:font-bold font-semibold flex-1 ${
                   themeMode === "light" ? "text-white" : "text-black"
                 }`}
               >
                 #{_id.substring(0, 5)}
               </h1>
-              <h1 className="text-gray-500">Due {formattedDueDate}</h1>
-              <h1 className="text-gray-500">{clientName}</h1>
+              <h1 className="md:inline hidden text-gray-500 flex-1">
+                Due {formattedDueDate}
+              </h1>
+              <h1 className="text-gray-500 flex-1">{clientName}</h1>
               <h1
-                className={` ${
+                className={`flex-1 ${
                   themeMode === "light" ? "text-white" : "text-black"
                 }`}
               >
                 #{itemPrice}
               </h1>
-              <span
-                className={`md:font-bold font-semibold ${
-                  themeMode === "light" ? "text-white" : "text-black"
-                }`}
-              >
+              <span className="flex-1 capitalize md:mr-10 rounded-md">
+                {status === "pending" ? (
+                  <p className="bg-orange-400 text-center bg-opacity-20 p-2 rounded-lg text-orange-400">
+                    pending
+                  </p>
+                ) : status === "paid" ? (
+                  <p className="bg-green-400 text-center bg-opacity-20 py-2 px-2 rounded-lg text-green-400">
+                    paid
+                  </p>
+                ) : null}
+              </span>
+              <span className="md:inline hidden text-[#9884fc] md:font-bold font-semibold ">
                 {<IoIosArrowForward size={20} />}
               </span>
-            </div>
+            </Link>
           );
         })}
       </div>

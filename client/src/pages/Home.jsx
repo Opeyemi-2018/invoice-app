@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <div
       className={`min-h-screen ${
-        themeMode === "light" ? "bg-[#181D31]" : "bg-gray-50"
+        themeMode === "light" ? "bg-[#0e122b]" : "bg-gray-50"
       }`}
     >
       <div className="max-w-4xl md:pt-10 pt-20 sm:px-0 px-2 mx-auto">

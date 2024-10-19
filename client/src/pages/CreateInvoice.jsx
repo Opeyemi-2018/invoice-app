@@ -3,13 +3,14 @@ import { GlobalContext } from "../context/createContext";
 import { MdOutlineDone } from "react-icons/md";
 import { LiaTimesSolid } from "react-icons/lia";
 import { MdErrorOutline } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CreateInvoice = () => {
   const { themeMode } = useContext(GlobalContext);
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     StreetAddress: "",
     ownersCity: "",
@@ -31,19 +32,37 @@ const CreateInvoice = () => {
   console.log(formData);
 
   const handleChange = (e) => {
-    e.preventDefault();
     const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    for (const key in formData) {
-      if (!formData[key]) {
-        setError(`${key} is required`);
-        setTimeout(() => setError(null), 3000);
-        return;
-      }
+    const requiredFields = [
+      "StreetAddress",
+      "ownersCity",
+      "ownersPostcode",
+      "ownersCountry",
+      "clientName",
+      "clientEmail",
+      "clientAddress",
+      "clientCity",
+      "clientPostcode",
+      "clientCountry",
+      "paymentTerm",
+      "date",
+      "projectDescription",
+      "itemName",
+      "itemQuantity",
+      "itemPrice",
+    ];
+
+    const isEmpty = requiredFields.some((field) => !formData[field]);
+
+    if (isEmpty) {
+      setError("All fields are required");
+      setTimeout(() => setError(null), 3000);
+      return;
     }
     try {
       setLoading(true);
@@ -67,6 +86,7 @@ const CreateInvoice = () => {
         return;
       }
       setSuccessMsg("invoice created successfully");
+      navigate("/");
       setTimeout(() => setSuccessMsg(null), 3000);
       setLoading(false);
       setFormData({
@@ -97,7 +117,7 @@ const CreateInvoice = () => {
   return (
     <div
       className={`md:pt-10 pt-20 md:py-4 py-2 md:px-1 px-2 ${
-        themeMode === "light" ? "bg-[#181D31]" : "bg-white"
+        themeMode === "light" ? "bg-[#0e122b]" : "bg-white"
       }`}
     >
       <div
@@ -114,7 +134,13 @@ const CreateInvoice = () => {
           />
         </Link>
         <div className="">
-          <h1 className="text-white mb-4">CreateInvoice</h1>
+          <h1
+            className={` mb-4 ${
+              themeMode === "light" ? "text-white" : "text-black"
+            }`}
+          >
+            Create Invoice
+          </h1>
           <form onSubmit={handleSubmit}>
             <div>
               {/* div for bill form start */}
@@ -386,6 +412,7 @@ const CreateInvoice = () => {
                 />{" "}
               </div>
             </div>
+
             <button
               disabled={loading}
               className="mt-4 w-full capitalize md:p-2 p-1 text-white bg-[#917cfa] rounded-lg"

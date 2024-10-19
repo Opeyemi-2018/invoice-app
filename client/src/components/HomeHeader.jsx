@@ -42,9 +42,9 @@ const HomeHeader = () => {
   }, []);
   return (
     <header className=" flex items-start justify-between mb-6">
-      <div>
+      <div className={`${invoices.length === 0 ? "hidden" : "inline"}`}>
         <h1
-          className={`font-semibold sm:text-2xl text-1xl capitalize ${
+          className={` font-semibold sm:text-2xl text-1xl capitalize ${
             themeMode === "light" ? "text-white" : "text-black"
           }`}
         >
@@ -61,7 +61,7 @@ const HomeHeader = () => {
       <div
         className={`flex items-center gap-2 ${
           themeMode === "light" ? "text-white" : "text-black"
-        }`}
+        } ${invoices.length === 0 ? "hidden" : "inline"}`}
       >
         <h1>
           filter <span className="md:inline hidden">by status</span>

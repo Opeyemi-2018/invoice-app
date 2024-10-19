@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
       .cookie("access_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // secure only in production
-        maxAge: 10 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       }) // Expires after 7 days
       .status(200) // Set the response status code to 200
       .json({ message: "Login successfull", user: rest }); // Send the user data (excluding password) in the response
@@ -54,13 +54,9 @@ router.post("/login", async (req, res) => {
 });
 
 // sign out route
-router.get("/signout", async (req, res) => {
-  try {
-    res.clearCookie("access_token");
-    res.status(200).json({ message: "user successfully sign out" });
-  } catch (error) {
-    return res.status(500).json({ message: "internal serval errror" });
-  }
+router.get("/signout", (req, res) => {
+  res.clearCookie("access_token");
+  res.status(200).json({ message: "user successfully sign out" });
 });
 
 // account delete route

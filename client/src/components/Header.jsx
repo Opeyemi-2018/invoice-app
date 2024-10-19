@@ -50,7 +50,7 @@ const Header = () => {
   };
   return (
     <>
-      <header className="fixed top-0 w-16 bottom-0  bg-[#303553] md:flex hidden flex-col justify-between items-center rounded-br-md rounded-tr-md">
+      <header className="fixed z-20 top-0 w-16 bottom-0  bg-[#303553] md:flex hidden flex-col justify-between items-center rounded-br-md rounded-tr-md">
         <div className="flex  justify-center items-center w-full">
           <Link
             to={"/"}

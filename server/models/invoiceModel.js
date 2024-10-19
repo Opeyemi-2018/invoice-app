@@ -18,6 +18,16 @@ const invoiceSchema = new mongoose.Schema(
     itemName: { type: String, required: true },
     itemQuantity: { type: Number, required: true },
     itemPrice: { type: Number, required: true },
+    status: {
+      type: String,
+      enum: ["pending", "paid", "overdue"],
+      default: "pending", // Default status to pending
+    },
+    userRef: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true, // Ensure this is required if every invoice must have a user reference
+    },
   },
   { timestamps: true }
 );
