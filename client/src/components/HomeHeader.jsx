@@ -118,7 +118,10 @@ const HomeHeader = ({ setFilter }) => {
         className="flex items-center md:p-2 p-1 md:gap-2 gap-1 bg-[#9884fc] rounded-full"
       >
         {" "}
-        <FiPlus size={25} className="rounded-full bg-white p-1" />{" "}
+        <FiPlus
+          size={25}
+          className="rounded-full text-[#9884fc] bg-white p-1"
+        />{" "}
         <h1 className="text-white capitalize">
           New <span className="md:inline hidden">invoice</span>
         </h1>

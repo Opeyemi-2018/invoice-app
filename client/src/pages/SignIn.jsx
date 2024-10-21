@@ -81,7 +81,7 @@ const SignIn = () => {
             className="flex flex-col gap-3 justify-center items-center "
           >
             <input
-              className="p-2 w-80 border border-gray-800 focus:outline-none rounded-md"
+              className="p-2 w-80 border text-black border-gray-800 focus:outline-none rounded-md"
               type="text"
               autoComplete="off"
               id="email"
@@ -90,7 +90,7 @@ const SignIn = () => {
               placeholder="email"
             />
             <input
-              className="p-2 w-80 border border-gray-800 focus:outline-none rounded-md"
+              className="p-2 w-80 border text-black border-gray-800 focus:outline-none rounded-md"
               type="text"
               autoComplete="off"
               id="password"
