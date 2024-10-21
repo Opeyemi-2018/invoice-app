@@ -17,7 +17,11 @@ const SignUp = () => {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { value, id } = e.target;
+    const formattedValue =
+      id === "email" || id === "name" ? value.toLowerCase() : value;
+
+    setFormData({ ...formData, [id]: formattedValue });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();

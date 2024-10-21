@@ -11,7 +11,11 @@ const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    const formattedValue =
+      id === "email" || id === "name" ? value.toLowerCase() : value;
+
+    setFormData({ ...formData, [id]: formattedValue });
   };
 
   const handleSubmit = async (e) => {
