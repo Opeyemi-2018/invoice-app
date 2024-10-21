@@ -87,7 +87,7 @@ const Header = () => {
           ) : (
             <Link
               to={"/sign-in"}
-              className="bg-white py-1 px-1 text-nowrap rounded-sm font-semibold"
+              className="text-white py-1 px-1 text-nowrap rounded-sm font-semibold"
             >
               sign in
             </Link>
@@ -162,7 +162,7 @@ const Header = () => {
           ) : (
             <Link
               to={"/sign-in"}
-              className="bg-white py-1 px-2 rounded-lg font-semibold"
+              className="text-white py-1 px-2 rounded-lg font-semibold"
             >
               sign in
             </Link>
