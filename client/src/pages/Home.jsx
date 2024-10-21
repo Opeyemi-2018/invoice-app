@@ -1,10 +1,11 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../context/createContext";
 import HomeHeader from "../components/HomeHeader";
 import HomeContent from "../components/HomeContent";
 
 const Home = () => {
   const { themeMode } = useContext(GlobalContext);
+  const [filter, setFilter] = useState("all");
   return (
     <div
       className={`min-h-screen ${
@@ -12,8 +13,8 @@ const Home = () => {
       }`}
     >
       <div className="max-w-4xl md:pt-10 pt-20 sm:px-0 px-2 mx-auto">
-        <HomeHeader />
-        <HomeContent />
+        <HomeHeader setFilter={setFilter} />
+        <HomeContent filter={filter} />
       </div>
     </div>
   );

@@ -3,8 +3,8 @@ import { IoIosArrowForward } from "react-icons/io";
 import { GlobalContext } from "../context/createContext";
 import { Link } from "react-router-dom";
 
-const HomeContent = () => {
-  const { themeMode } = useContext(GlobalContext);
+const HomeContent = ({ filter }) => {
+  const { themeMode, user } = useContext(GlobalContext);
   const [invoices, setInvoices] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,6 +40,13 @@ const HomeContent = () => {
     };
     fetchInvoice();
   }, []);
+
+  // Filter invoices based on the selected filter
+  const filteredInvoices = invoices.filter((invoice) => {
+    if (filter === "all") return true;
+    return invoice.status === filter;
+  });
+
   if (loading) {
     return (
       <div className="flex items-center flex-col min-h-screen justify-center flex-grow">
@@ -51,10 +58,25 @@ const HomeContent = () => {
       </div>
     );
   }
+
+  if (!user) {
+    return (
+      <div
+        className={`${
+          themeMode === "light" ? "text-white" : "text-black"
+        } sm:text-3xl text-2xl pt-10`}
+      >
+        <h1>you have to sign in to see available invoice</h1>
+        <Link className="text-gray-700 underline" to={"/sign-in"}>
+          sign in
+        </Link>
+      </div>
+    );
+  }
   return (
     <div>
       <div>
-        {invoices.map((invoice) => {
+        {filteredInvoices.map((invoice) => {
           const {
             _id,
             clientName,
@@ -102,7 +124,7 @@ const HomeContent = () => {
                   themeMode === "light" ? "text-white" : "text-black"
                 }`}
               >
-                #{itemPrice}
+                ${itemPrice}
               </h1>
               <span className="flex-1 capitalize md:mr-10 rounded-md">
                 {status === "pending" ? (

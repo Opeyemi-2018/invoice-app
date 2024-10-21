@@ -5,13 +5,24 @@ import { IoIosArrowBack } from "react-icons/io";
 import { MdOutlineDone } from "react-icons/md";
 
 const InvoiceDetails = () => {
-  const { themeMode } = useContext(GlobalContext);
+  const { themeMode, user } = useContext(GlobalContext);
   const { invoiceId } = useParams();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [invoiceInfo, setInvoiceInfo] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Apply theme class to body element immediately
+    if (themeMode === "light") {
+      document.body.classList.add("light");
+      document.body.classList.remove("dark");
+    } else {
+      document.body.classList.add("dark");
+      document.body.classList.remove("light");
+    }
+  }, [themeMode]);
 
   useEffect(() => {
     const fetchInvoiceDetails = async () => {
@@ -84,21 +95,24 @@ const InvoiceDetails = () => {
     }
   };
 
-  // Function to calculate and format the due date
-  const calculateDueDate = (dateString, paymentTerm) => {
-    const invoiceDate = new Date(dateString);
-    const dueDate = new Date(invoiceDate);
-    dueDate.setDate(invoiceDate.getDate() + paymentTerm);
-    return dueDate.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
   const handleGoBack = () => {
     navigate(-1);
   };
+
+  // Check if invoiceInfo is loaded before accessing its properties
+  const createdAt = invoiceInfo ? new Date(invoiceInfo.date) : null;
+  const dueDate = createdAt
+    ? new Date(
+        createdAt.getTime() + invoiceInfo.paymentTerm * 24 * 60 * 60 * 1000
+      )
+    : null;
+  const formattedDueDate = dueDate
+    ? dueDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+      })
+    : "";
 
   if (loading) {
     return (
@@ -108,6 +122,21 @@ const InvoiceDetails = () => {
             themeMode === "light" ? "bg-white" : "bg-[#303553]"
           } `}
         ></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div
+        className={`${
+          themeMode === "light" ? "text-white" : "text-black"
+        } sm:text-3xl text-2xl pt-10`}
+      >
+        <h1>you have to sign in to see available invoice</h1>
+        <Link className="text-gray-700 underline" to={"/sign-in"}>
+          sign in
+        </Link>
       </div>
     );
   }
@@ -222,12 +251,7 @@ const InvoiceDetails = () => {
                   </div>
                   <div>
                     <span className="text-gray-500">Payment Date</span>
-                    <h1>
-                      {calculateDueDate(
-                        invoiceInfo.date,
-                        invoiceInfo.paymentTerm
-                      )}
-                    </h1>
+                    <h1>{formattedDueDate}</h1>
                   </div>
                 </div>
 
@@ -276,7 +300,7 @@ const InvoiceDetails = () => {
               {invoiceInfo.status === "pending" && (
                 <Link
                   to={`/edit-invoice/${invoiceId}`}
-                  className={` capitalize text-gray-400 rounded-md sm:p-3 p-2 w-full ${
+                  className={` capitalize text-center text-gray-400 rounded-md sm:p-3 p-2 w-full ${
                     themeMode === "light" ? "bg-[#4f567e]" : "bg-gray-300"
                   }`}
                 >

@@ -3,11 +3,12 @@ import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/createContext";
-const HomeHeader = () => {
+const HomeHeader = ({ setFilter }) => {
   const { themeMode } = useContext(GlobalContext);
   const [invoices, setInvoices] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showStatus, setShowStatus] = useState(false);
 
   useEffect(() => {
     const fetchInvoice = async () => {
@@ -40,6 +41,10 @@ const HomeHeader = () => {
     };
     fetchInvoice();
   }, []);
+
+  const handleFilterChange = (status) => {
+    setFilter(status);
+  };
   return (
     <header className=" flex items-start justify-between mb-6">
       <div className={`${invoices.length === 0 ? "hidden" : "inline"}`}>
@@ -59,14 +64,53 @@ const HomeHeader = () => {
       </div>
 
       <div
-        className={`flex items-center gap-2 ${
+        className={`flex items-center gap-2 relative ${
           themeMode === "light" ? "text-white" : "text-black"
         } ${invoices.length === 0 ? "hidden" : "inline"}`}
       >
         <h1>
           filter <span className="md:inline hidden">by status</span>
         </h1>
-        <IoIosArrowDown size={20} className="text-gray-500" />
+        <IoIosArrowDown
+          onClick={() => setShowStatus(!showStatus)}
+          size={20}
+          className={`${
+            showStatus ? "rotate-180" : "rotate-0"
+          } transition-all duration-300 text-gray-500`}
+        />
+        {showStatus && (
+          <div
+            className={` flex-col flex gap-2 items-start absolute top-10 text-white rounded-md bg-[#9884fc] p-2 right-1`}
+          >
+            <button
+              className=" capitalize"
+              onClick={() => {
+                handleFilterChange("all");
+                setShowStatus(!showStatus);
+              }}
+            >
+              All
+            </button>
+            <button
+              className=" capitalize"
+              onClick={() => {
+                handleFilterChange("pending");
+                setShowStatus(!showStatus);
+              }}
+            >
+              pending
+            </button>
+            <button
+              className=" capitalize"
+              onClick={() => {
+                handleFilterChange("paid");
+                setShowStatus(!showStatus);
+              }}
+            >
+              paid
+            </button>
+          </div>
+        )}
       </div>
 
       <Link

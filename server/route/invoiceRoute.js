@@ -26,9 +26,9 @@ router.post("/createinvoice", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/fetch", async (req, res) => {
+router.get("/fetch", verifyToken, async (req, res) => {
   try {
-    const invoice = await Invoice.find({});
+    const invoice = await Invoice.find({ userRef: req.user.id });
     return res.status(200).json(invoice);
   } catch (error) {
     console.error("Error creating invoice:", error); // Log the error for debugging

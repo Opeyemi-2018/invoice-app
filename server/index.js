@@ -6,9 +6,13 @@ import userRoute from "./route/userRoute.js";
 import invoiceRoute from "./route/invoiceRoute.js";
 import cors from "cors";
 import bodyParser from "body-parser";
+import path from "path";
 dotenv.config();
 
 let app = express();
+
+const __dirname = path.resolve();
+
 // Increase the body size limit
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -31,3 +35,9 @@ mongoose.connect(process.env.DB_URL).then(() => {
 
 app.use("/api/auth", userRoute);
 app.use("/api/invoice", invoiceRoute);
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});

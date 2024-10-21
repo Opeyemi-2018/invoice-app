@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Default light mode background color */
+body {
+    background-color: #0e122b; /* light theme bg-color (example) */
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* If dark theme */
+  body.dark {
+    background-color: #f8f9fa; /* dark theme bg-color (example) */
+    color: black;
+  }
+  
