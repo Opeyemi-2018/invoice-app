@@ -415,7 +415,7 @@ const CreateInvoice = () => {
 
             <button
               disabled={loading}
-              className="mt-4 w-full capitalize md:p-2 p-1 text-white bg-[#917cfa] rounded-lg"
+              className="mt-4 w-full capitalize sm:p-3 p-2 text-white bg-[#917cfa] rounded-lg"
             >
               save
             </button>
